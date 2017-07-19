@@ -33,7 +33,7 @@ class AdminForm extends React.Component {
 
     
     toggleAdmin = () => {
-        this.setState((prevState) => {
+        this.setState(prevState => {
             if(prevState.showAdmin === "hidden") {
                 return {
                     showAdmin: "visible",
@@ -48,40 +48,41 @@ class AdminForm extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        const {catObj: {catName:inputName, counter:inputCounter}} = nextProps;
         this.setState({
-            inputName: nextProps.catObj.catName,
-            inputCounter: nextProps.catObj.counter,
+            inputName,
+            inputCounter
         })
     }
 
-    handleAdminSave = (element) => {
+    handleAdminSave = element => {
         element.preventDefault();
         const counter = parseInt(this.refs.catCounter.value, 10);
         const catName = this.refs.catName.value;
-        const catObj = createCatObject(catName, counter);
-        this.props.handleAdminSave(catObj);
+        const cat = createCatObject(catName, counter);
+        this.props.handleAdminSave(cat);
     }
 
-    handleNameChange = (element)=> {
+    handleNameChange = element=> {
         this.setState({
             inputName: element.target.value,
         })
     }
 
-    handleCounterChange = (element) => {
+    handleCounterChange = element => {
         this.setState({
             inputCounter: element.target.value,
         })
     }
 
     render() {
-        const catObj = this.props.catObj;
+        const {showAdmin, inputName, inputCounter} = this.state;
         return (
             <div>
                 <button type="button" onClick={this.toggleAdmin} > Admin </button>
-                <form id="adminForm" style={{visibility: this.state.showAdmin}} onSubmit={this.handleAdminSave} >
-                    <p> Cat Name <input id={`cat-name-input`} ref={`catName`} onChange={this.handleNameChange} value={this.state.inputName} /></p>
-                    <p> Cat Counter <input id={`cat-counter-input`} ref={`catCounter`} type={`number`} onChange={this.handleCounterChange} value={this.state.inputCounter} /></p>
+                <form id="adminForm" style={{visibility: showAdmin}} onSubmit={this.handleAdminSave} >
+                    <p> Cat Name <input id='cat-name-input' ref='catName' onChange={this.handleNameChange} value={inputName} /></p>
+                    <p> Cat Counter <input id='cat-counter-input' ref='catCounter' type='number' onChange={this.handleCounterChange} value={inputCounter} /></p>
                     <button type="button" onClick={this.toggleAdmin} >Cancel</button>
                     <button type="submit">Save</button>
                 </form>
@@ -95,12 +96,11 @@ function CatComponent(props) {
     
     // const {catName, counter, url} = props.catObj;
     const {catObj:{catName, counter, url}, handleCatClick, handleAdminSave, catObj} = props;
-    console.log( catName, handleCatClick);
     return (
-        <div id={`cat-display`}>
+        <div id='cat-display'>
             <p>{catName}</p>
-            <img src={url} onClick={props.handleCatClick} id={`image-elem`} />
-            <p id={`counter`} > {`Counter:  ${counter}`} </p>
+            <img src={url} onClick={handleCatClick} id='image-elem' />
+            <p id='counter' > {`Counter:  ${counter}`} </p>
             <AdminForm catObj={catObj} handleAdminSave={handleAdminSave} />
         </div>
     );
@@ -108,23 +108,23 @@ function CatComponent(props) {
 
 function ListComponent(props) {
 
-    const handleListClick = (element) =>{
+    const handleListClick = element =>{
         element.preventDefault();
         const catNum = parseInt(element.target.id, 10);
         props.handleListClick(catNum);
     }
 
     const generateList = () => {
-        return props.catList.map((catName, index)=>{
+        return props.catList.map((catName, index) =>{
             return <li key={index} >
-                <a href={`#`} onClick={handleListClick} id={index} >{catName}</a>
+                <a href='#' onClick={handleListClick} id={index} >{catName}</a>
             </li>
         });
     }
 
     return (
-        <div className={`names-list`} >
-            <ul >
+        <div className='names-list' >
+            <ul type='none' >
                 {generateList()}
             </ul>
         </div>
@@ -153,7 +153,7 @@ class App extends React.Component {
         })
     }
 
-    handleAdminSave = (catObj)=> {
+    handleAdminSave = catObj => {
         // const catList = this.state.cats;
         // catList[this.state.currentCat] = catObj;
         // this.setState({
@@ -164,17 +164,17 @@ class App extends React.Component {
         this.setState({ cats });
     }
 
-    handleListClick = (catNum) => {
+    handleListClick = catNum => {
         this.setState({
             currentCat: catNum,
         });
     }
 
     render() {
-        const catNamesList = this.state.cats.map((catObj) => catObj.catName);
+        const catNamesList = this.state.cats.map(catObj => catObj.catName);
         return (
-            <div className='container' id={`page`} >
-                <div className={`heading`} >
+            <div className='container' id='page' >
+                <div className='heading' >
                     <h1><u>Cat Clicker</u>
                     </h1>
                 </div>
